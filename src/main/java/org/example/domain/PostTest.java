@@ -1,17 +1,11 @@
 package org.example.domain;
 
-public class Post {
-    private  Long userId;
-    private  Long id;
-    private  String title;
-    private  String body;
-
-    public Post(Long userId, Long id, String title, String body) {
-        this.userId = userId;
-        this.id = id;
-        this.title = title;
-        this.body = body;
-    }
+public class PostTest {
+    Long userId;
+    Long id;
+    String title;
+//    String email;
+    String body;
 
     public Long getUserId() {
         return userId;
@@ -43,5 +37,15 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return "PostTest{" +
+                "userId=" + userId +
+                ", id=" + id +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                '}';
     }
 }
