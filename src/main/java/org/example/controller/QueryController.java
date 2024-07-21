@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.domain.Answer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient.*;
 import reactor.core.publisher.Flux;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/query")
 public class QueryController {
 
     private final RequestHeadersUriSpec<?> defaultGetRequest;
@@ -23,14 +25,14 @@ public class QueryController {
         this.defaultGetRequest = defaultGetRequest;
     }
 
-    public Mono<Object> createFlux(String q) {
+    public Mono<Answer> createFlux(String q) {
         ResponseSpec q1 = defaultGetRequest.uri(uriBuilder -> uriBuilder
 //                        .queryParam("q", q)
-                        .queryParam("postId", "1")
+                        .queryParam("q", q)
                         .build())
                 .retrieve();
-        Mono<Object> answerMono = q1.bodyToMono(Object.class);
-        Object block = answerMono.block();
+        Mono<Answer> answerMono = q1.bodyToMono(Answer.class);
+        Answer block = answerMono.block();
         return answerMono;
     }
 
@@ -39,13 +41,14 @@ public class QueryController {
             "hemingford", "hemingford ne"));
 
     @GetMapping("/{city}")
-    public Mono<Object> getPosts(@PathVariable("city") String requestCity) {
+    public Mono<Answer> getPosts(@PathVariable("city") String requestCity) {
         Map.Entry<String, String> city = cities.entrySet().stream()
                 .filter(entrySet -> entrySet.getKey().equals(requestCity))
                 .findFirst().orElse(null);
 
         if (city != null) {
-            return createFlux(city.getValue());
+            Mono<Answer> flux = createFlux(city.getValue());
+            return flux;
         } else {
             return null;
         }

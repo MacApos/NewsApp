@@ -1,8 +1,10 @@
 package org.example.domain;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.mapper.CityMapper;
+import org.example.service.DynamoDbService;
+import org.example.service.LoadDataService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -10,14 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousFileChannel;
-import java.nio.channels.CompletionHandler;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,61 +21,31 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-
-import static java.nio.file.StandardOpenOption.*;
-
 
 @Component
 public class LoadDataTask implements Runnable {
-    Map<String, String> cities = Map.of(
+    public static Map<String, String> cities = Map.of(
             "new-york", "new york",
-            "ashburn", "ashburn",
+//            "ashburn", "ashburn",
             "hemingford", "hemingford ne"
     );
 
-//    Map<String, String> cities = Map.of("new-york", "/1",
-//            "ashburn", "/2",
-//            "hemingford", "/3");
-
-    private final UriComponentsBuilder newsApiUriBuilder;
-    private final String[] newsApiUriHeaders;
-    private final WebClient webClient;
-    private final CityMapper cityMapper;
-
-    public LoadDataTask(UriComponentsBuilder newsApiUriBuilder, String[] newsApiUriHeaders, WebClient webClient, CityMapper cityMapper) {
-        this.newsApiUriBuilder = newsApiUriBuilder;
-        this.newsApiUriHeaders = newsApiUriHeaders;
-        this.webClient = webClient;
-        this.cityMapper = cityMapper;
-    }
-
-    public Mono<String> getMonoString(String query) {
-        Mono<String> mono = getResponseSpec(query).bodyToMono(String.class);
-        return mono;
-    }
-
-    public Mono<Answer> getMonoAnswer(String query) {
-        return getResponseSpec(query).bodyToMono(Answer.class);
-    }
-
-    private WebClient.ResponseSpec getResponseSpec(String query) {
-        return webClient.get()
-                .uri(newsApiUriBuilder.cloneBuilder()
-                        .queryParam("q", query)
-//                        .queryParam("postId", query)
-                        .build()
-                        .toUri())
-                .header(newsApiUriHeaders[0], newsApiUriHeaders[1])
-                .retrieve();
-    }
+    Path path = Paths.get("src/main/resources/cities.txt");
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @Override
-    public void run() {
+    private final LoadDataService loadDataService;
+    private final DynamoDbService dynamoDbService;
+    private final CityMapper cityMapper;
 
-        Path path = Paths.get("src/main/resources/cities.txt");
+    @Autowired
+    public LoadDataTask(LoadDataService loadDataService, CityMapper cityMapper, DynamoDbService dynamoDbService) {
+        this.loadDataService = loadDataService;
+        this.cityMapper = cityMapper;
+        this.dynamoDbService = dynamoDbService;
+        savaData();
+    }
+
+    private void savaData() {
         boolean fileExists = Files.exists(path);
         if (!fileExists) {
             try {
@@ -89,57 +54,49 @@ public class LoadDataTask implements Runnable {
                 throw new RuntimeException(e);
             }
 
-            Flux.fromIterable(cities.values())
+            List<Answer> block = Flux.fromIterable(cities.values())
                     .publishOn(Schedulers.boundedElastic())
                     .delayElements(Duration.ofMillis(500))
-                    .flatMap(this::getMonoString)
-                    .subscribe(s -> {
-                        s = String.format("%s\n", s);
-                        try {
-                            Files.write(path, s.getBytes(), StandardOpenOption.APPEND);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        } else {
-            AsynchronousFileChannel fileChannel;
-            ByteBuffer buffer;
-            try {
-                buffer = ByteBuffer.wrap(Files.readAllBytes(path));
-                fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            fileChannel.read(buffer, 0, null, new CompletionHandler<Integer, Void>() {
-                @Override
-                public void completed(Integer integer, Void unused) {
-                    String read = new String(buffer.array(), StandardCharsets.UTF_8);
-                    Answer answer;
-                    List<Answer> answers = new ArrayList<>();
-                    for (String s : read.trim().split("\n")) {
-                        try {
-                            answer = objectMapper.readValue(read, Answer.class);
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
-                        answers.add(answer);
-                    }
-                }
+                    .flatMap(loadDataService::getResponse)
+                    .collectList().blockOptional().orElseThrow(RuntimeException::new);
 
-                @Override
-                public void failed(Throwable throwable, Void unused) {
-                    System.err.println("fail");
+            block.forEach(answer -> {
+                try {
+                    String str = String.format("%s\n", objectMapper.writeValueAsString(answer));
+                    Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             });
-
         }
+    }
+
+    private List<Answer> mockData() {
+        List<Answer> answers = new ArrayList<>();
+        try {
+            for (String lane : Files.readAllLines(path)) {
+                answers.add(objectMapper.readValue(lane, Answer.class));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return answers;
+    }
+
+
+    @Override
+    public void run() {
+        Flux.fromIterable(mockData())
+                .delayElements(Duration.ofMillis(1000))
+                .map(cityMapper::answerToCity)
+                .subscribe(dynamoDbService::putNews);
 
 //        Flux.fromIterable(cities.values())
 //                .publishOn(Schedulers.boundedElastic())
 //                .delayElements(Duration.ofMillis(500))
-//                .flatMap(this::getMonoAnswer)
+//                .flatMap(loadDataService::getResponse)
 //                .publishOn(Schedulers.boundedElastic())
 //                .map(cityMapper::answerToCity)
-//                .subscribe(s -> System.out.println(s.getName()));
+//                .subscribe(dynamoDbService::putNews);
     }
 }

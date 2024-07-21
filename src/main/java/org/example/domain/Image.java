@@ -4,14 +4,12 @@ import java.util.LinkedHashMap;
 
 public class Image {
     private String contentUrl;
-    private LinkedHashMap<String, Object> thumbnail;
 
     public Image() {
     }
 
-    public Image(String contentUrl, LinkedHashMap<String, Object> thumbnail) {
+    public Image(String contentUrl) {
         this.contentUrl = contentUrl;
-        this.thumbnail = thumbnail;
     }
 
     public String getContentUrl() {
@@ -20,13 +18,5 @@ public class Image {
 
     public void setContentUrl(String contentUrl) {
         this.contentUrl = contentUrl;
-    }
-
-    public LinkedHashMap<String, Object> getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(LinkedHashMap<String, Object> thumbnail) {
-        this.thumbnail = thumbnail;
     }
 }

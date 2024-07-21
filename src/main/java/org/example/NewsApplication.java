@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.domain.dto.City;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -49,7 +51,7 @@ public class NewsApplication {
                 .scheme("https")
                 .host(host)
                 .path(pathSegments)
-                .queryParam("count", 50)
+                .queryParam("count", 20)
                 .queryParam("mkt", "en-US")
                 .queryParam("setLang", "en")
                 .queryParam("sortBy", "date")

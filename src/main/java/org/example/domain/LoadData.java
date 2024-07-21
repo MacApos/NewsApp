@@ -19,7 +19,6 @@ public class LoadData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println(Thread.currentThread().getName());
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(loadDataTask, 0, 160 * 50 * 1000, TimeUnit.MILLISECONDS);
     }

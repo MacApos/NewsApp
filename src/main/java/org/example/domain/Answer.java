@@ -1,7 +1,5 @@
 package org.example.domain;
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbIgnore;
-
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +8,13 @@ public class Answer {
     private String readLink;
     private int totalEstimatedMatches;
     private Map<String, String> queryContext;
-    private List<Article> value;
+    private List<Value> value;
     private Object sort;
 
     public Answer() {
     }
 
-    public Answer(String _type, String readLink, int totalEstimatedMatches, Map<String, String> queryContext, List<Article> value, Object sort) {
+    public Answer(String _type, String readLink, int totalEstimatedMatches, Map<String, String> queryContext, List<Value> value, Object sort) {
         this._type = _type;
         this.readLink = readLink;
         this.totalEstimatedMatches = totalEstimatedMatches;
@@ -41,7 +39,6 @@ public class Answer {
         this.readLink = readLink;
     }
 
-    @DynamoDbIgnore
     public int getTotalEstimatedMatches() {
         return totalEstimatedMatches;
     }
@@ -50,7 +47,6 @@ public class Answer {
         this.totalEstimatedMatches = totalEstimatedMatches;
     }
 
-    @DynamoDbIgnore
     public Map<String, String> getQueryContext() {
         return queryContext;
     }
@@ -59,11 +55,11 @@ public class Answer {
         this.queryContext = queryContext;
     }
 
-    public List<Article> getValue() {
+    public List<Value> getValue() {
         return value;
     }
 
-    public void setValue(List<Article> value) {
+    public void setValue(List<Value> value) {
         this.value = value;
     }
 
