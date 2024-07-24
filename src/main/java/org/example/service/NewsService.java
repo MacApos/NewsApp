@@ -1,16 +1,12 @@
 package org.example.service;
 
-import org.example.domain.Answer;
 import org.example.domain.dto.City;
 import org.example.mapper.CityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.Disposable;
+
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 @Service
 public class NewsService {
@@ -26,24 +22,16 @@ public class NewsService {
     }
 
     public Mono<City> putNewsIntoTable(String city) {
-        System.out.println(Thread.currentThread().getName());
-        CompletableFuture<City> objectCompletableFuture = dynamoDbService.getNews(city).thenApply(s -> {
-            if (s == null) {
-                Mono<Answer> response = loadDataService.getResponse(city);
-                Mono<City> cityMono = response.map(answer->{
-                    System.out.println(Thread.currentThread().getName());
-                    return cityMapper.answerToCity(answer);
-                });
-                cityMono.subscribe(c->{
-                    System.out.println(Thread.currentThread().getName());
-                    dynamoDbService.putNews(c);
-                });
-                return cityMono.block();
-            }
-            return s;
-        });
+        Mono<City> cityMono = Mono.fromFuture(dynamoDbService.getNews(city));
+        Mono<City> cityMono1 = cityMono
+                .switchIfEmpty(loadDataService.getResponse(city).map(cityMapper::answerToCity))
+                .doOnNext(c -> cityMono.hasElement().subscribe(hasElements -> {
+                    if (!hasElements) {
+                        dynamoDbService.putNews(c);
+                    }
+                }));
 
-        return Mono.fromFuture(objectCompletableFuture);
+        return cityMono1;
     }
 
 }
