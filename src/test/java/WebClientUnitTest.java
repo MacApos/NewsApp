@@ -24,10 +24,10 @@ public class WebClientUnitTest {
     @Autowired
     private WebClient webClient;
 
-    @Value("${host}")
+    @Value("${newsHost}")
     private String uri;
 
-    @Value("${apiKey}")
+    @Value("${newsApiKey}")
     private String apiKey;
 
     @Value("${cx}")

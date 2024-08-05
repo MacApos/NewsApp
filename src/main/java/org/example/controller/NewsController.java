@@ -17,8 +17,8 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @RequestMapping("/{city}")
-    public Mono<City> newsController(@PathVariable String city)  {
-        return newsService.putNewsIntoTable(city);
+    @RequestMapping("/{city}/{state}")
+    public Mono<City> newsController(@PathVariable String city,@PathVariable String state)  {
+        return newsService.putNewsIntoTable(city, state);
     }
 }

@@ -1,9 +1,7 @@
-package org.example.domain;
+package org.example.run;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.pinpoint.model.Schedule;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

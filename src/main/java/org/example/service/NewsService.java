@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.domain.dto.Article;
 import org.example.domain.dto.City;
 import org.example.mapper.CityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class NewsService {
@@ -21,17 +25,12 @@ public class NewsService {
         this.dynamoDbService = dynamoDbService;
     }
 
-    public Mono<City> putNewsIntoTable(String city) {
-        Mono<City> cityMono = Mono.fromFuture(dynamoDbService.getNews(city));
-        Mono<City> cityMono1 = cityMono
-                .switchIfEmpty(loadDataService.getResponse(city).map(cityMapper::answerToCity))
-                .doOnNext(c -> cityMono.hasElement().subscribe(hasElements -> {
-                    if (!hasElements) {
-                        dynamoDbService.putNews(c);
-                    }
-                }));
-
-        return cityMono1;
+    public Mono<City> putNewsIntoTable(String city, String state) {
+//        Mono<City> cityMono = Mono.fromFuture(dynamoDbService.getNews(city));
+        Mono<City> cityMono = Mono.empty();
+        return cityMono.switchIfEmpty(loadDataService.validateCity(city, state))
+                .doOnSuccess(success -> System.out.println("Write to database"));
+        //        dynamoDbService::putNews
     }
 
 }

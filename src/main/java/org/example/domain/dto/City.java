@@ -10,13 +10,20 @@ import java.util.List;
 @DynamoDbBean
 public class City {
     private String name;
+    private String state;
     private List<Article> articles;
 
     public City() {
     }
 
-    public City(String name, List<Article> articles) {
+    public City(String name, String state) {
         this.name = name;
+        this.state = state;
+    }
+
+    public City(String name, String state, List<Article> articles) {
+        this.name = name;
+        this.state = state;
         this.articles = articles;
     }
 
@@ -29,6 +36,14 @@ public class City {
         this.name = name;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public List<Article> getArticles() {
         return articles;
     }
@@ -36,5 +51,7 @@ public class City {
     public void setArticles(List<Article> values) {
         this.articles = values;
     }
+
+
 
 }

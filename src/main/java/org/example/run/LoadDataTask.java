@@ -1,15 +1,13 @@
-package org.example.domain;
+package org.example.run;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.domain.Answer;
 import org.example.mapper.CityMapper;
 import org.example.service.DynamoDbService;
 import org.example.service.LoadDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
