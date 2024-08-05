@@ -1,16 +1,11 @@
 package org.example.service;
 
-import org.example.domain.dto.Article;
 import org.example.domain.dto.City;
 import org.example.mapper.CityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class NewsService {

@@ -1,24 +1,17 @@
 package org.example.service;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import org.example.domain.Answer;
 import org.example.domain.dto.City;
-import org.example.domain.dto.ValidatedCity;
 import org.example.mapper.CityMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class LoadDataService {
@@ -37,17 +30,6 @@ public class LoadDataService {
         this.cityMapper = cityMapper;
         this.dynamoDBService = dynamoDBService;
     }
-
-//    private URI buildUri(UriComponentsBuilder builder, Map<String, String> params, String path) {
-//        String query = params.entrySet().stream()
-//                .map(param -> String.format("%s=%s", param.getKey(), param.getValue()))
-//                .collect(Collectors.joining(","));
-//        return builder.cloneBuilder()
-//                .query(query)
-//                .path(path == null ? "" : path)
-//                .build()
-//                .toUri();
-//    }
 
     private URI buildUri(UriComponentsBuilder builder, String path, Map<String, String> params) {
         UriComponentsBuilder cloneBuilder = builder.cloneBuilder();
