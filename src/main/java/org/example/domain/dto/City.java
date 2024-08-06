@@ -1,5 +1,8 @@
 package org.example.domain.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
@@ -9,7 +12,12 @@ import java.util.List;
 @Component
 @DynamoDbBean
 public class City {
+    @NotNull
+    @Size(min = 3)
     private String name;
+
+    @NotNull
+    @Size(min = 2)
     private String state;
     private List<Article> articles;
 

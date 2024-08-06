@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.CompletableFuture;
-
 @RestController
 public class NewsController {
     private final NewsService newsService;
@@ -18,7 +16,7 @@ public class NewsController {
     }
 
     @RequestMapping("/{city}/{state}")
-    public Mono<City> newsController(@PathVariable String city,@PathVariable String state)  {
+    public Mono<City> newsController(@PathVariable String city, @PathVariable String state) {
         return newsService.putNewsIntoTable(city, state);
     }
 }

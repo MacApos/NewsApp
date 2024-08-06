@@ -35,6 +35,10 @@ public class NewsApplication {
     @Value("${cityApiKey}")
     public String cityApiKey;
 
+    @Bean
+    public WebClient webClient() {
+        return WebClient.create();
+    }
 
     @Bean
     public UriComponentsBuilder newsApiUriBuilder() {
@@ -61,27 +65,5 @@ public class NewsApplication {
     @Bean
     public String[] newsApiUriHeaders() {
         return new String[]{"Ocp-Apim-Subscription-Key", newsApiKey};
-    }
-
-    @Bean
-    public WebClient.Builder webClientBuilder() throws MalformedURLException {
-        return WebClient.builder()
-                .baseUrl(newsApiUriBuilder().build().toUri().toURL().toString());
-    }
-
-    @Bean
-    public WebClient webClient(){
-        return WebClient.create();
-    }
-
-    @Bean
-    public RequestHeadersUriSpec<?> createDefaultGetRequest(WebClient.Builder webClientBuilder) {
-        return webClientBuilder.build().get();
-    }
-
-    @Bean
-    public RequestHeadersSpec<?> createRequestHeaders(RequestHeadersUriSpec<?> createDefaultPostRequest) {
-        createDefaultPostRequest.header("Ocp-Apim-Subscription-Key", newsApiKey);
-        return createDefaultPostRequest.header("Ocp-Apim-Subscription-Key", newsApiKey);
     }
 }
