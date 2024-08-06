@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class NewsController {
     private final NewsService newsService;

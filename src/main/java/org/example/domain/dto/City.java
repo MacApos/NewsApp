@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @DynamoDbBean
@@ -35,6 +36,12 @@ public class City {
         this.articles = articles;
     }
 
+    public String prepareQuery( String... params) {
+        ArrayList<String> queryParams = new ArrayList<>(List.of(name, state));
+        Collections.addAll(queryParams, params);
+        return String.join(",", queryParams);
+    }
+
     @DynamoDbPartitionKey
     public String getName() {
         return name;
@@ -59,7 +66,6 @@ public class City {
     public void setArticles(List<Article> values) {
         this.articles = values;
     }
-
 
 
 }

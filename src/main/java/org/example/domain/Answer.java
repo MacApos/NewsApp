@@ -14,7 +14,8 @@ public class Answer {
     public Answer() {
     }
 
-    public Answer(String _type, String readLink, int totalEstimatedMatches, Map<String, String> queryContext, List<Value> value, Object sort) {
+    public Answer(String _type, String readLink, int totalEstimatedMatches, Map<String, String> queryContext,
+                  List<Value> value, Object sort) {
         this._type = _type;
         this.readLink = readLink;
         this.totalEstimatedMatches = totalEstimatedMatches;

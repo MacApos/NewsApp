@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class NewsService {
     private final LoadDataService loadDataService;
@@ -20,7 +23,7 @@ public class NewsService {
     public Mono<City> putNewsIntoTable(String city, String state) {
         Mono<City> cityMono = Mono.fromFuture(dynamoDbService.getNews(city));
         Mono<City> cityMono1 = Mono.empty();
-        return cityMono1.switchIfEmpty(loadDataService.validateCity(city, state))
+        return loadDataService.validateCity(city, state)
                 .doOnSuccess(success -> System.out.println("Write to database"));
         //        dynamoDbService::putNews
     }

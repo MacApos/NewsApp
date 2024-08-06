@@ -66,11 +66,11 @@ public class LoadDataService {
                     );
                     validator.validate(initialCity, errors);
                     if (errors.getAllErrors().isEmpty()) {
+                        String query = initialCity.prepareQuery(countryCode);
                         return webClient.get()
-                                .uri(buildUri(geocodingApiUriBuilder, "/direct",
-                                        Map.of("q", String.join(",", List.of(city, state, countryCode)))))
+                                .uri(buildUri(geocodingApiUriBuilder, "/direct", Map.of("q", query)))
                                 .retrieve()
-                                .bodyToMono(new ParameterizedTypeReference<List<Map<String, String>>>() {
+                                .bodyToMono(new ParameterizedTypeReference<List<City>>() {
                                 });
                     } else {
                         return Mono.error(cityNotFound);
@@ -80,11 +80,9 @@ public class LoadDataService {
                     if (results.isEmpty()) {
                         return Mono.error(cityNotFound);
                     } else {
-                        Map<String, String> resultCity = results.get(0);
-//                                getResponse(String.format("%s,%s",
-//                                                resultCity.get("name"), resultCity.get("state")))
+//                                getResponse(results.get(0).prepareQuery()
 //                                        .map(cityMapper::answerToCity);
-                        return Mono.just(new City(resultCity.get("name"), resultCity.get("state")));
+                        return Mono.just(results.get(0));
                     }
                 });
     }

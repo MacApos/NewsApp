@@ -5,11 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.MalformedURLException;
-import java.net.URI;
 
 @SpringBootApplication
 public class NewsApplication {
