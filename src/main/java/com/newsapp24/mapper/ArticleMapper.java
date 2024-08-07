@@ -1,14 +1,11 @@
-package org.example.mapper;
+package com.newsapp24.mapper;
 
-import org.example.domain.Image;
-import org.example.domain.Value;
-import org.example.domain.dto.Article;
+import com.newsapp24.domain.Image;
+import com.newsapp24.domain.Value;
+import com.newsapp24.domain.dto.Article;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
-
-import java.util.Map;
 
 @Mapper(componentModel = "spring")
 public interface ArticleMapper {

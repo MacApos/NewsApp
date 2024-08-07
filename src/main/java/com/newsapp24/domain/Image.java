@@ -1,4 +1,4 @@
-package org.example.domain;
+package com.newsapp24.domain;
 
 import java.util.LinkedHashMap;
 

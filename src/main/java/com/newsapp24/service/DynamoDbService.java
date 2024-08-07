@@ -1,6 +1,6 @@
-package org.example.service;
+package com.newsapp24.service;
 
-import org.example.domain.dto.City;
+import com.newsapp24.domain.dto.City;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
@@ -32,7 +32,6 @@ public class DynamoDbService {
     public void updateNews(){
 
     }
-
 
 
 }

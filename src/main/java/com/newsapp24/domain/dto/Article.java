@@ -1,4 +1,4 @@
-package org.example.domain.dto;
+package com.newsapp24.domain.dto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

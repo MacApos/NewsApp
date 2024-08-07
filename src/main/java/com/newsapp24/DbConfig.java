@@ -1,6 +1,6 @@
-package org.example;
+package com.newsapp24;
 
-import org.example.domain.dto.City;
+import com.newsapp24.domain.dto.City;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.enhanced.dynamodb.*;

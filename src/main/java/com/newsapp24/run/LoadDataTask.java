@@ -1,10 +1,10 @@
-package org.example.run;
+package com.newsapp24.run;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.domain.Answer;
-import org.example.mapper.CityMapper;
-import org.example.service.DynamoDbService;
-import org.example.service.LoadDataService;
+import com.newsapp24.domain.Answer;
+import com.newsapp24.mapper.CityMapper;
+import com.newsapp24.service.DynamoDbService;
+import com.newsapp24.service.LoadDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;

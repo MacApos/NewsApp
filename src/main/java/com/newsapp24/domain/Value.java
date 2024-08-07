@@ -1,4 +1,4 @@
-package org.example.domain;
+package com.newsapp24.domain;
 
 public class Value {
     private String name;

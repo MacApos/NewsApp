@@ -1,8 +1,5 @@
-package org.example.domain;
+package com.newsapp24.domain;
 
-import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
-
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

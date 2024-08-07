@@ -1,8 +1,8 @@
-package org.example.service;
+package com.newsapp24.service;
 
-import org.example.domain.Answer;
-import org.example.domain.dto.City;
-import org.example.mapper.CityMapper;
+import com.newsapp24.mapper.CityMapper;
+import com.newsapp24.domain.Answer;
+import com.newsapp24.domain.dto.City;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

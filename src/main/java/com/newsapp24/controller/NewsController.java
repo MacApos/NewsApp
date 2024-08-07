@@ -1,14 +1,11 @@
-package org.example.controller;
+package com.newsapp24.controller;
 
-import org.example.domain.dto.City;
-import org.example.service.NewsService;
+import com.newsapp24.service.NewsService;
+import com.newsapp24.domain.dto.City;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class NewsController {

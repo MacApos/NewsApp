@@ -1,13 +1,10 @@
-package org.example.service;
+package com.newsapp24.service;
 
-import org.example.domain.dto.City;
+import com.newsapp24.domain.dto.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class NewsService {

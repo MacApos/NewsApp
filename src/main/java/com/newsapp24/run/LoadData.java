@@ -1,4 +1,4 @@
-package org.example.run;
+package com.newsapp24.run;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

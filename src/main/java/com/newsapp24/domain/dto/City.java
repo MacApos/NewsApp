@@ -1,6 +1,5 @@
-package org.example.domain.dto;
+package com.newsapp24.domain.dto;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.stereotype.Component;
@@ -8,7 +7,6 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @DynamoDbBean

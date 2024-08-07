@@ -1,7 +1,7 @@
-package org.example.mapper;
+package com.newsapp24.mapper;
 
-import org.example.domain.Answer;
-import org.example.domain.dto.City;
+import com.newsapp24.domain.Answer;
+import com.newsapp24.domain.dto.City;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
